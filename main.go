@@ -48,8 +48,16 @@ func main(){
 	}else {
 		fmt.Println("value doesnt exist")
 	}
-
-
+	fmt.Println ("------------------DAY2YOHOHO------------------")
+	//command:=Command{}
+	sample:="SET name UTKARSH"
+	outputcmd:=Command{}
+	outputcmd=readCmd(sample)
+	fmt.Println(outputcmd.name)
+	for i:=0;i<len(outputcmd.args);i++{
+		fmt.Print(outputcmd.args[i] )
+		fmt.Print(" ")
+	}
 
 }
 // func divide(a, b int) (int, error) {
