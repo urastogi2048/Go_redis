@@ -29,35 +29,45 @@ func main(){
 	database.db = make(map[string]string)
 	//database.db["name"]="Utkarsh"
 
-	database.Set("name", "Nigga")
-	fmt.Println(database.db["name"])
-	database.Set("name","NOT NIGGA")
-	value,isExist:= database.Get("name")
-	if isExist{
-		fmt.Println(value)
-	}else {
-		fmt.Println("value doesnt exist")
-	}
-	isdone:= database.Del("name")
-	if isdone {
-		fmt.Println("deleted")
-	}
-	value,isExist=database.Get("name")
-	if isExist{
-		fmt.Println(value)
-	}else {
-		fmt.Println("value doesnt exist")
-	}
-	fmt.Println ("------------------DAY2YOHOHO------------------")
-	//command:=Command{}
-	sample:="SET name UTKARSH"
-	outputcmd:=Command{}
-	outputcmd=readCmd(sample)
-	fmt.Println(outputcmd.name)
-	for i:=0;i<len(outputcmd.args);i++{
-		fmt.Print(outputcmd.args[i] )
-		fmt.Print(" ")
-	}
+	// database.Set("name", "Nigga")
+	// fmt.Println(database.db["name"])
+	// database.Set("name","NOT NIGGA")
+	// value,isExist:= database.Get("name")
+	// if isExist{
+	// 	fmt.Println(value)
+	// }else {
+	// 	fmt.Println("value doesnt exist")
+	// }
+	// isdone:= database.Del("name")
+	// if isdone {
+	// 	fmt.Println("deleted")
+	// }
+	// value,isExist=database.Get("name")
+	// if isExist{
+	// 	fmt.Println(value)
+	// }else {
+	// 	fmt.Println("value doesnt exist")
+	// }
+	// fmt.Println ("------------------DAY2YOHOHO------------------")
+	// //command:=Command{}
+	// sample:="SET name UTKARSH"
+	// outputcmd:=Command{}
+	// outputcmd=readCmd(sample)
+	// fmt.Println(outputcmd.name)
+	// for i:=0;i<len(outputcmd.args);i++{
+	// 	fmt.Print(outputcmd.args[i] )
+	// 	fmt.Print(" ")
+	// }
+	fmt.Println("cmd test")
+	var cmd string
+	fmt.Print("redis-go> ")
+	//fmt.Scan(&cmd)
+	cmd="SET name Utkarsh"
+	c:= readCmd(cmd)
+	implCmd(c, database)
+	cmd="GET name"
+	c=readCmd(cmd)
+	implCmd(c,database)
 
 }
 // func divide(a, b int) (int, error) {

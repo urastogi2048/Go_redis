@@ -1,5 +1,5 @@
 package main
-import ("fmt",
+import ("fmt"
 	"strings")
 type  Command struct{
 	name string
