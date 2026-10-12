@@ -1,6 +1,6 @@
 package main
 
-import ("fmt")
+//import ("fmt")
 	
 
 func main(){
@@ -25,8 +25,7 @@ func main(){
 	// }else{
 	// 	fmt.Println(e)
 	// }
-	database:= Database{}
-	database.db = make(map[string]string)
+	
 	//database.db["name"]="Utkarsh"
 
 	// database.Set("name", "Nigga")
@@ -58,16 +57,21 @@ func main(){
 	// 	fmt.Print(outputcmd.args[i] )
 	// 	fmt.Print(" ")
 	// }
-	fmt.Println("cmd test")
-	var cmd string
-	fmt.Print("redis-go> ")
-	//fmt.Scan(&cmd)
-	cmd="SET name Utkarsh"
-	c:= readCmd(cmd)
-	implCmd(c, database)
-	cmd="GET name"
-	c=readCmd(cmd)
-	implCmd(c,database)
+	//------------cmd parsing working------------//
+	// fmt.Println("cmd test")
+	// var cmd string
+	// fmt.Print("redis-go> ")
+	// //fmt.Scan(&cmd)
+	// cmd="SET name Utkarsh"
+	// c:= readCmd(cmd)
+	// implCmd(c, database)
+	// cmd="GET name"
+	// c=readCmd(cmd)
+	// implCmd(c,database)
+	//-------tcp-------------------------//
+	//fmt.Print("go_redis >")
+	dummyconn()
+	
 
 }
 // func divide(a, b int) (int, error) {
