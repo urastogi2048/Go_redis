@@ -69,7 +69,8 @@ func main(){
 	// c=readCmd(cmd)
 	// implCmd(c,database)
 	//-------tcp-------------------------//
-	//fmt.Print("go_redis >")
+	//fmt.Print("go_redis >")	
+	
 	dummyconn()
 	
 
