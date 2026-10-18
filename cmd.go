@@ -25,7 +25,7 @@ func readCmd(input string) (c Command) {
 	}
 	return c
 }
-func implCmd(input Command, db Database,connection Connection) {
+func implCmd(input Command, db *Database,connection Connection) {
 	
 	if input.name == "SET" {
 		if len(input.args) != 2 {
