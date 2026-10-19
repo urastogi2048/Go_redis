@@ -14,14 +14,21 @@ func handleconn(conn net.Conn, database *Database){
 		defer conn.Close()
 		//fmt.Println("Waiting for command...")
 		for {
-			n,err:=reader.ReadString('\n')
+			//n,err:=reader.ReadString('\n')
 			//fmt.Println("2. Received:", n)
-			if err!=nil {
-				break
+			// if err!=nil {
+			// 	break
+			// }
+			parsedCmd,e:= readRESPcmd(reader)
+			if e!=nil {
+				 return 
 			}
-			parsedCmd:= readCmd(n)
 			//fmt.Println("3. Executing command")
-			implCmd(parsedCmd, database, Connection{conn:conn})
+			cmd:=Command{
+				name: parsedCmd[0],
+				args: parsedCmd[1:],
+			}
+			implCmd(cmd, database, Connection{conn:conn})
 			//fmt.Println("3. Executing command")
 			//fmt.Println("4. Command completed")
 

@@ -36,35 +36,37 @@ func implCmd(input Command, db *Database,connection Connection) {
 		val := input.args[1]
 
 		db.Set(key, val)
-		fmt.Fprintln(connection.conn, "OK")
+		//fmt.Fprintln(connection.conn, "OK")
+		connection.conn.Write([]byte("+OK\r\n"))
 
 	} else if input.name == "GET" {
 		if len(input.args) != 1 {
-			fmt.Fprintln(connection.conn, "Invalid command")
+			writeString(connection.conn, "length of input not matched")
 			return
 		}
 		key := input.args[0]
 		val, e := db.Get(key)
 		result := val
 		if !e {
-			fmt.Fprintln(connection.conn, "Invalid command")
+			writeString(connection.conn,"invalid request")
 		} else {
-			fmt.Fprintln(connection.conn, result)
+			writeBulkString(connection.conn,result)
 		}
 	} else if input.name == "DEL" {
 		if len(input.args) != 1 {
-			fmt.Fprintln(connection.conn, "Invalid command")
+			writeString(connection.conn, "invalid request length")
 			return
 		}
 		key := input.args[0]
 		f := db.Del(key)
 		if f {
-			fmt.Fprintln(connection.conn, "OK")
+			connection.conn.Write([]byte("+OK\r\n"))
+
 		} else {
-			fmt.Fprintln(connection.conn, "Invalid command")
+			writeString(connection.conn, "Invalid key")
 		}
 	} else {
-		fmt.Fprintln(connection.conn, "Invalid command")
+		writeString(connection.conn, "Invalid key")
 		return
 	}
 
