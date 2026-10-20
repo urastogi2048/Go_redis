@@ -38,7 +38,7 @@ func handleconn(conn net.Conn, database *Database){
 }
 func dummyconn() {
 	database:= Database{}
-	database.db = make(map[string]string)
+	database.db = make(map[string]Entry)
 	ln, err := net.Listen("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Print(err)
