@@ -3,6 +3,7 @@ package main
 import (
 	"sync"
 	"time"
+	//"strconv"
 )
 
 type Entry struct {
@@ -35,13 +36,13 @@ func (d *Database) Get(key string) (string, bool) {
 
 			return val.value, true
 		} else if time.Now().Before(val.expiresIn) {
-			
+
 			return val.value, true
-		} else if time.Now().After(val.expiresIn){
+		} else if time.Now().After(val.expiresIn) {
 			delete(d.db, key)
 			return "", false
-		}else {
-			return "",false
+		} else {
+			return "", false
 		}
 
 	}
@@ -55,5 +56,57 @@ func (d *Database) Del(key string) bool {
 		return true
 	} else {
 		return false
+	}
+}
+
+func (d *Database) StartActiveExpiration(interval time.Duration) {
+	go func() {
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		for range ticker.C {
+			now := time.Now()
+			d.mu.Lock()
+			for key, entry := range d.db {
+				if !entry.expiresIn.IsZero() &&
+					!now.Before(entry.expiresIn) {
+					delete(d.db, key)
+				}
+			}
+			d.mu.Unlock()
+		}
+	}()
+}
+func (d *Database) SetWithTTL(key string, value string, interval time.Time) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	entry := Entry{
+		value:     value,
+		expiresIn: interval,
+	}
+	d.db[key] = entry
+}
+func (d *Database) TTLApply(key string, interval time.Time) bool {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	entry, ok := d.db[key]
+	if !ok {
+		return false
+	}
+
+	entry.expiresIn = interval
+	d.db[key] = entry
+	return true
+}
+func (d *Database) TTLGet(key string) int{
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	entry, ok:=d.db[key]
+	if !ok {
+		return -1
+	}else {
+		remaining := time.Until(entry.expiresIn)
+		seconds := int(remaining.Seconds())
+		
+		return seconds
 	}
 }
