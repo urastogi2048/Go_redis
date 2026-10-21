@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
-	"bufio"
+	"time"
 )
 type Connection struct {
 	conn net.Conn
@@ -12,25 +13,17 @@ type Connection struct {
 func handleconn(conn net.Conn, database *Database){
 		reader:=bufio.NewReader(conn)
 		defer conn.Close()
-		//fmt.Println("Waiting for command...")
 		for {
-			//n,err:=reader.ReadString('\n')
-			//fmt.Println("2. Received:", n)
-			// if err!=nil {
-			// 	break
-			// }
 			parsedCmd,e:= readRESPcmd(reader)
 			if e!=nil {
 				 return 
 			}
-			//fmt.Println("3. Executing command")
 			cmd:=Command{
 				name: parsedCmd[0],
 				args: parsedCmd[1:],
 			}
 			implCmd(cmd, database, Connection{conn:conn})
-			//fmt.Println("3. Executing command")
-			//fmt.Println("4. Command completed")
+			
 
 		}
 		
@@ -44,29 +37,16 @@ func dummyconn() {
 		fmt.Print(err)
 
 	}
-	//buffer := make([]byte, 1024)
+	database.StartActiveExpiration(1*time.Second)
 	for {
 		conn, err := ln.Accept()
-		//fmt.Println("1. Client connected")
 		if err != nil {
 			fmt.Print(err)
 
 		}
-		//fmt.Print("go-redis >")
-		// n, err := bufio.NewReader(conn).ReadString('\n')
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
-		// parsed_cmd:=readCmd(n)
-		// implCmd(parsed_cmd, database, Connection{conn: conn})
+		
 		go handleconn(conn, &database)
-		//conn.Close()
-
-
-		//fmt.Print(n)
-		// for i := 0; i < len(n); i++ {
-		// 	fmt.Print(buffer[i], " ")
-		// }
+	
 
 	}
 
